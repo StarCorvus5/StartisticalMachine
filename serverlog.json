@@ -17,5 +17,5 @@
     {"month": "November 2024", "amount": 460},
     {"month": "December 2024", "amount": 1029},
     {"month": "January 2025", "amount": 455},
-    {"month": "February 2025", "amount": unknown}
+    {"month": "February 2025", "amount": 0}
 ]
