@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monthly Server Activity</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f4f4f9;
+        }
+        #monthlyGraph {
+            width: 90%;
+            height: 90%;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <canvas id="monthlyGraph"></canvas>
+
+    <script>
+        async function fetchData() {
+            const response = await fetch('serverlog.json');
+            const data = await response.json();
+            return data;
+        }
+
+        async function createChart() {
+            const data = await fetchData();
+            const labels = data.map(item => item.month);
+            const amounts = data.map(item => item.amount);
+
+            const ctx = document.getElementById('monthlyGraph').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: '',
+                        data: amounts,
+                        borderColor: '#4caf50',
+                        backgroundColor: '#4caf50',
+                        pointRadius: 5,
+                        pointHoverRadius: 7,
+                        fill: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            labels: { usePointStyle: true }
+                        },
+                        tooltip: {
+                            mode: 'index',  // Keeps the same hover effect as your version
+                            intersect: false
+                        }
+                    },
+                    interaction: {
+                        mode: 'nearest', // Uses the same hover effect as your original
+                        axis: 'x',
+                        intersect: false
+                    },
+                    scales: {
+                        x: {
+                            display: true,
+                            title: { display: true, text: 'Month' },
+                            grid: { color: 'rgba(200, 200, 200, 0.3)' }
+                        },
+                        y: {
+                            display: true,
+                            title: { display: true, text: 'Amount' },
+                            grid: { color: 'rgba(200, 200, 200, 0.3)' }
+                        }
+                    },
+                    elements: {
+                        line: { borderWidth: 2 }
+                    }
+                }
+            });
+        }
+
+        createChart();
+    </script>
+</body>
+</html>
